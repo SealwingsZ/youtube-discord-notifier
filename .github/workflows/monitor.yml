@@ -34,8 +34,8 @@ jobs:
       - name: Run YouTube monitor
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          DISCORD_WEBHOOK_A: ${{ secrets.DISCORD_WEBHOOK_A }}
-          DISCORD_WEBHOOK_B: ${{ secrets.DISCORD_WEBHOOK_B }}
+          DISCORD_WEBHOOK_GROUP_A: ${{ secrets.DISCORD_WEBHOOK_GROUP_A }}
+          DISCORD_WEBHOOK_GROUP_B: ${{ secrets.DISCORD_WEBHOOK_GROUP_B }}
         run: python monitor.py
 
       - name: Save state to repository
