@@ -1,0 +1,53 @@
+name: YouTube Discord Monitor
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [cron_trigger]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: youtube-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run YouTube monitor
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          DISCORD_WEBHOOK_A: ${{ secrets.DISCORD_WEBHOOK_A }}
+          DISCORD_WEBHOOK_B: ${{ secrets.DISCORD_WEBHOOK_B }}
+        run: python monitor.py
+
+      - name: Save state to repository
+        run: |
+          git config user.name "YouTube Monitor"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add state.json
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Update YouTube monitor state"
+            git fetch origin main
+            git rebase origin/main
+            git push origin main
+          fi

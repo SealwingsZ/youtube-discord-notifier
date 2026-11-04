@@ -1,0 +1,22 @@
+{
+  "groups": {
+    "A": {
+      "webhook_env": "DISCORD_WEBHOOK_GROUP_A"
+    },
+    "B": {
+      "webhook_env": "DISCORD_WEBHOOK_GROUP_B"
+    }
+  },
+  "channels": [
+    {
+      "name": "Channel Name A",
+      "id": "UCxxxxxxxxxxxxxxxxxxxxxx",
+      "group": "A"
+    },
+    {
+      "name": "Channel Name B",
+      "id": "UCyyyyyyyyyyyyyyyyyyyyyy",
+      "group": "B"
+    }
+  ]
+}
