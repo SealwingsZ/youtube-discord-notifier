@@ -28,11 +28,12 @@ A lightweight YouTube monitor that sends automatic notifications to Discord when
 YouTube_API_KEY: YouTube API Key[1]
 DISCORD_WEBHOOK_A: Discord Webhook[2]
 DISCORD_WEBHOOK_B: Discord Webhook(optional)
+DISCORD_WEBHOOK_ERROR: Discord Webhook for system error alerts (optional, fallback to Group A)
 ```
 
 if you want to get notifications in multiple discord channels, you can add more than two discord webhook
 
-> ⚠️Do not share your API Key or Webhook URLs publicly.
+> ⚠️ Do not share your API Key or Webhook URLs publicly.
 
 ### Adding YouTube Channels
 1. in `config.json` place the YouTube Channel ID[3] in "id"
@@ -75,14 +76,17 @@ Example:
 *This project is limited to a maximum of **30-ish** channels for optimal system effectiveness.
 
 ### cron-job setting [cron-job](https://console.cron-job.org/)
-```text
+
 1. go to cron-job and create new cronjob
 2. use this following setting:
 
+```text
 COMMON:
 URL: https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/dispatches > change YOUR_USERNAME/YOUR_REPO to your own
 Execution schedule: Every 5 minutes
+```
 
+```text
 ADVANCED:
 Headers [1], [2], [3]:
 
@@ -123,6 +127,8 @@ you can check the Workflow progress in the Actions tab in your Repository on Git
 
 ### ₊⊹ Default Notifications Pattern
 
+> YouTube Notifications
+
 for New Videos:
 ```text
 NEW VIDEO!! (x minutes ago)
@@ -135,7 +141,26 @@ NEW LIVE STREAM!! (x minutes ago)
 {live stream link}
 ```
 
-You can customize notification formats in `monitor.py`:
+
+> System Notifications
+
+for System Errors:
+```text
+[System Alert] YouTube Discord Notifier Error! (Timestamp)
+
+Issue Found:
+{error_message}
+```
+
+for System Recovery:
+```text
+[System Status] YouTube Monitor Notifier is back to normal. (Timestamp)
+
+Resolved Issue:
+{previous_error_message}
+```
+
+You can customize YouTube notification formats in `monitor.py`:
 
 ```python
 def send_discord(webhook, video_id, event_type, group):
