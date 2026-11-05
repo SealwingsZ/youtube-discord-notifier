@@ -36,9 +36,11 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           DISCORD_WEBHOOK_GROUP_A: ${{ secrets.DISCORD_WEBHOOK_GROUP_A }}
           DISCORD_WEBHOOK_GROUP_B: ${{ secrets.DISCORD_WEBHOOK_GROUP_B }}
+          DISCORD_WEBHOOK_ERROR: ${{ secrets.DISCORD_WEBHOOK_ERROR }}
         run: python monitor.py
 
       - name: Save state to repository
+        if: always()
         run: |
           git config user.name "YouTube Monitor"
           git config user.email "github-actions[bot]@users.noreply.github.com"
