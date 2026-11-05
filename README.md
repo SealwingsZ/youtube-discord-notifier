@@ -3,6 +3,7 @@ A lightweight YouTube monitor that sends automatic notifications to Discord when
 
 ## How to use:
 
+> 📌 **Prerequisite:** Make sure your GitHub repository visibility is set to **Public** for free GitHub Actions execution.
 ### YouTube API setting [Google Cloud Console](https://console.cloud.google.com/)
 ```text
 1. setting YouTube API in Google Cloud Console
@@ -27,7 +28,7 @@ A lightweight YouTube monitor that sends automatic notifications to Discord when
 2. create Secrets following this pattern
 YouTube_API_KEY: YouTube API Key[1]
 DISCORD_WEBHOOK_A: Discord Webhook[2]
-DISCORD_WEBHOOK_B: Discord Webhook(optional)
+DISCORD_WEBHOOK_B: Discord Webhook (optional)
 DISCORD_WEBHOOK_ERROR: Discord Webhook for system error alerts (optional, fallback to Group A)
 ```
 
@@ -63,7 +64,7 @@ example:
   ]
 }
 ```
-[3] YouTube Channel ID can be get by go to the YouTube Channel you want to select, then right click and go to View page source. Press Ctrl+F and put in "channel_id". Copy the ID which always start with UC... ,that's the YouTube Channel ID
+[3] YouTube Channel ID can be get by go to the YouTube Channel you want to select, then right click and go to View page source. Press Ctrl+F and put in "channel_id". Copy the ID which always start with UC... that's the YouTube Channel ID
 
 Example:
 ```json
@@ -116,6 +117,7 @@ Request Body (JSON):
   "event_type": "cron_trigger"
 }
 ```
+> ⚠️ **Note:** If you want your repository to be **Private** regardless of GitHub Actions execution time limits, make sure your Personal Access Token (PAT) has explicit `contents: write` and `actions: write` permissions, or simply set the repository visibility to **Public** for unlimited free usage.
 --------------------
 
 ## Test Run
@@ -183,12 +185,12 @@ def send_discord(webhook, video_id, event_type, group):
 ### And why do I need to use this project?
 
 Answer:
-> No Subscription Required: You can still receive notifications directly through your Discord server from any YouTube channels even if you haven’t subscribed or aren't logged into your YouTube account on your device.
+> **No Subscription Required:** You can still receive notifications directly through your Discord server from any YouTube channels even if you haven’t subscribed or aren't logged into your YouTube account on your device.
 
-> Flexible Channel Categorization:: You can freely categorize your notifications by selecting various YouTube channels and configuring the bot to send alerts to specific channels of your choice on your Discord server.
-- For example, route cooking content to #food and self-improvement content to #growth. You can also use this as a way to share updates and discuss new videos with your friends on your Discord server.
+> **Flexible Channel Categorization:** You can freely categorize your notifications by selecting various YouTube channels and configuring the bot to send alerts to specific channels of your choice on your Discord server.
+> > For example, route cooking content to #food and self-improvement content to #growth. You can also use this as a way to share updates and discuss new videos with your friends on your Discord server.
 
-> Automation for Creators: If you are a YouTuber or content creator with a Discord server for your followers, you can leverage this project to automatically send notifications to your server. This ensures your fans never miss a new video, saving you the time and effort of having to post an announcement on Discord yourself every single time.
+> **Automation for Creators:** If you are a YouTuber or content creator with a Discord server for your followers, you can leverage this project to automatically send notifications to your server. This ensures your fans never miss a new video, saving you the time and effort of having to post an announcement on Discord yourself every single time.
 
 > No more issue when YouTube fails to send notifications for new video uploads or live streams to subscribers.
 
@@ -203,3 +205,27 @@ Developer
 - SealwingsZ
 ```
 :3
+----------
+
+## Troubleshooting & Common Issues
+If you followed the guide but encountered errors or notifications aren't working, check these common fixes:
+
+1. **GitHub Actions / Cron Trigger Failed (401 / 404 Error)**
+   - Ensure your Personal Access Token (PAT) has explicit `contents: write` and `actions: write` permissions.
+   - Double-check your repository URL in `cron-job.org` (`https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/dispatches`).
+
+2. **Bot stopped working after ~7 days (Private Repository)**
+   - Private repositories have a 2,000 free Actions minutes/month limit. Running every 5 minutes will exhaust this limit quickly. Change your repository visibility to **Public** for unlimited free execution.
+
+3. **Missing Environment Variable / `KeyError`**
+   - Verify that your secret names in GitHub Secrets match the exact names: `YOUTUBE_API_KEY`, `DISCORD_WEBHOOK_A`, etc.
+
+4. **YouTube API Error (403 / Quota Exceeded)**
+   - Make sure **YouTube Data API v3** is explicitly enabled in your Google Cloud Console project.
+   - Verify that your API Key is valid and hasn't exceeded the daily 10,000 units limit.
+
+5. **Channel Fetch Error**
+   - Ensure the Channel ID in `config.json` starts with `UC...`. Do not use channel handles (e.g., `@ChannelName`) or custom URLs.
+
+6. **Not receiving error alerts on Discord repeatedly**
+   - The system enforces a **6-hour anti-spam cooldown** for identical error messages. Check your GitHub Actions execution logs to see the actual runtime details.
