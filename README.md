@@ -1,6 +1,10 @@
 # YouTube Discord Notifier
 A lightweight YouTube monitor that sends automatic notifications to Discord whenever your selected YouTube channels upload a video or start a live stream.
 
+### **⚠️ Notice:** This repository template is unmaintained and will not receive any future updates.
+You are welcome to fork it and adapt it for your own project.
+- Lasted updated: November 5, 2026
+
 ## How to use:
 
 > 📌 **Prerequisite:** Make sure your GitHub repository visibility is set to **Public** for free GitHub Actions execution.
